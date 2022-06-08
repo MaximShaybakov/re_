@@ -24,12 +24,11 @@ def phone():
     phone_list = []
     for num,tel in enumerate(open_csv()):
         text = ' '.join(tel)
-        phone_pattern = r'(\.?)([7|8]{1})(\s?)(\(?)(\d{3})(\s?)(\)?)(\W?)(\d{3})(\W?)(\d{2})(\W?)(\d*)'
-        number = re.search(phone_pattern, text)
-        if number is not None:
-            tel_number = f'+7({number.group(5)}){number.group(9)}-{number.group(11)}-{number.group(13)}'
-            phone_list.append(tel_number)
-    done = [data() for name,num in data(),phone_list]
+        phone_pattern = r'(\.?)([7|8]{1})(\s?)(\(?)(\d{3})(\s?)(\)?)(\W?)(\d{3})(\W?)(\d{2})(\W?)(\d*)((\s?)(\(?)(доб?\.?)(\s?)(\d{4}?))*'
+        phone_num = re.search(phone_pattern, text)
+        if phone_num is not None:
+            phone_list.append(phone_num.group())
+            # phone_list.append(f'+7({phone_num.group(5)}){phone_num.group(9)}-{phone_num.group(11)}-{phone_num.group(13)} {phone_num.group(16)}')
     return phone_list
 
 
@@ -38,7 +37,7 @@ def ls():
 
 
 if __name__ == '__main__':
-    pprint(data())
+    # pprint(data())
     pprint(phone())
 
 
