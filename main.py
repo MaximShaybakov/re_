@@ -15,20 +15,19 @@ def open_file():
             rows_dict.append(row1)
     return (rows_list, rows_dict)
 
-# rows_list, rows_dict = open_file()
-
 
 def names():
     person_list = []
     for person_data in open_file()[0]:
         data = ' '.join(person_data)
-        # pprint(data)
-        initials_pattern = r'([А-У]{1}\w*)\W([А-У]{1}\w*)\W([А-У]{1}\w*)'
+        initials_pattern = r'([А-У]{1}\w*)\W([А-У]{1}\w*)(\W([А-У]{1}\w*))*'
         initials = re.match(initials_pattern, data)
-        if initials is not None:
-            last_fir_sur = initials.group()
-            # print(last_fir_sur)
-            person_list.append(last_fir_sur.split())
+        if initials is None:
+            person_list.append('')
+        else:
+            person_list.append(initials.group().split())
+    person_list.remove('')
+    # pprint(person_list)
     return person_list
 
 
@@ -38,26 +37,32 @@ def phone():
         data = ' '.join(person_data)
         phone_pattern = r'(\d{1})\s?\(?(\d{3})\s?\)?\W?(\d{3})\W?(\d{2})\W?(\d+)(\s?\(?(доб\.)\s?(\d*))*'
         phones = re.search(phone_pattern, data)
-        if phones is not None:
+        if phones is None:
+            phone_list.append('')
+        else:
             tel = f'+7({phones.group(2)}){phones.group(3)}-{phones.group(4)}-{phones.group(5)} {phones.group(7)}{phones.group(8)}'
             phone_list.append(tel.replace('NoneNone', '').strip())
+    phone_list.remove('')
+    # print(phone_list)
     return phone_list
 
 
 def correction_data():
     count = 0
     for index,_ in enumerate(open_file()[1]):
-        _['lastname'] = names()[count][0]
-        _['firstname'] = names()[count][1]
-        _['surname'] = names()[count][2]
-        _['phone'] = phone()
-        count += 1
+        try:
+            _['lastname'] = names()[count][0]
+            _['firstname'] = names()[count][1]
+            _['surname'] = names()[count][2]
+            _['phone'] = phone()[count]
+            count += 1
+        except IndexError:
+            _['surname'] = ''
         print(_)
-
     return
 
 if __name__ == '__main__':
     # print(open_file())
-    # print(names())
-    print(phone())
-    # correction_data()
+    # names()
+    # phone()
+    correction_data()
