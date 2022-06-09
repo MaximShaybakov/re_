@@ -13,21 +13,25 @@ def open_file():
         rows_dict = []
         for index1, row1 in enumerate(rows_dic_reader):
             rows_dict.append(row1)
+    # pprint(rows_list)
     return (rows_list, rows_dict)
+
+rows_list, rows_dict = open_file()
 
 
 def names():
-    person_list = []
-    for person_data in open_file()[0]:
-        data = ' '.join(person_data)
-        initials_pattern = r'([А-У]{1}\w*)\W([А-У]{1}\w*)(\W([А-У]{1}\w*))*'
-        initials = re.match(initials_pattern, data)
-        if initials is None:
-            person_list.append('')
-        else:
-            person_list.append(initials.group().split())
-    person_list.remove('')
-    return person_list
+    cp_rows_dict = rows_dict.copy()
+    new_row_dict = []
+    count = 0
+    for initials in rows_dict[1:]:
+        if initials['lastname'].split()[0] == cp_rows_dict[count]['lastname'].split()[0] or (cp_rows_dict[count]['position'] or cp_rows_dict[count]['phone'] or cp_rows_dict[count]['email'] is not None):
+            initials['position'] = cp_rows_dict[count]['position']
+            initials['phone'] = cp_rows_dict[count]['phone']
+            initials['email'] = cp_rows_dict[count]['email']
+        new_row_dict.append(initials)
+        count += 1
+    pprint(new_row_dict)
+    return new_row_dict
 
 
 def phone():
@@ -49,7 +53,7 @@ def correction_data():
     count = 0
     data_correct = []
     for index,_ in enumerate(open_file()[1]):
-        if _['lastname'] not in data_correct:
+        if _['lastname'] not in names()[count][0]:
             try:
                 _['lastname'] = names()[count][0]
                 _['firstname'] = names()[count][1]
@@ -59,8 +63,10 @@ def correction_data():
             except IndexError:
                 _['surname'] = ''
             data_correct.append(_)
-    data_correct[3].pop(None)
     return data_correct
 
 if __name__ == '__main__':
-    pprint(correction_data())
+    # open_file()
+    names()
+    # pprint(correction_data())
+    # print(rows_dict[0].values())
