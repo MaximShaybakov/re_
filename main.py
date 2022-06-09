@@ -3,12 +3,12 @@ import re
 from pprint import pprint
 
 def open_file():
-    with open('phonebook_raw.csv', 'r', encoding='utf-8') as csvfile:
+    with open('data_file/phonebook_raw.csv', 'r', encoding='utf-8') as csvfile:
         rows_list_reader = csv.reader(csvfile, delimiter=',', quotechar='"')
         rows_list = []
         for index, row in enumerate(rows_list_reader):
             rows_list.append(row)
-    with open('phonebook_raw.csv', 'r', encoding='utf-8') as csvfile:
+    with open('data_file/phonebook_raw.csv', 'r', encoding='utf-8') as csvfile:
         rows_dic_reader = csv.DictReader(csvfile, delimiter=',', quotechar='"') # quoting=csv.QUOTE_MINIMAL
         rows_dict = []
         for index1, row1 in enumerate(rows_dic_reader):
@@ -62,7 +62,4 @@ def correction_data():
     return
 
 if __name__ == '__main__':
-    # print(open_file())
-    # names()
-    # phone()
     correction_data()
