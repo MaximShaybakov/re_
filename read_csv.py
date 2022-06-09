@@ -10,6 +10,7 @@ def open_file():
             rows_list.append(row)
     with open('data_file/phonebook_raw.csv', 'r', encoding='utf-8') as csvfile:
         rows_dic_reader = csv.DictReader(csvfile, delimiter=',', quotechar='"')
+        rows_dict = []
         for index1, row1 in enumerate(rows_dic_reader):
             rows_dict.append(row1)
     return (rows_list, rows_dict)
@@ -58,10 +59,8 @@ def correction_data():
             except IndexError:
                 _['surname'] = ''
             data_correct.append(_)
+    data_correct[3].pop(None)
     return data_correct
 
 if __name__ == '__main__':
-    pprint(open_file()[1])
-    # pprint(names())
-    # pprint(phone())
-    # pprint(correction_data())
+    pprint(correction_data())
