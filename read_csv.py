@@ -3,14 +3,14 @@ import re
 from pprint import pprint
 
 def open_file():
+    rows_list = []
     with open('data_file/phonebook_raw.csv', 'r', encoding='utf-8') as csvfile:
         rows_list_reader = csv.reader(csvfile, delimiter=',', quotechar='"')
-        rows_list = []
         for index, row in enumerate(rows_list_reader):
             rows_list.append(row)
+    rows_dict = []
     with open('data_file/phonebook_raw.csv', 'r', encoding='utf-8') as csvfile:
         rows_dic_reader = csv.DictReader(csvfile, delimiter=',', quotechar='"')
-        rows_dict = []
         for index1, row1 in enumerate(rows_dic_reader):
             rows_dict.append(row1)
     # pprint(rows_list)
@@ -24,13 +24,15 @@ def names():
     new_row_dict = []
     count = 0
     for initials in rows_dict[1:]:
-        if initials['lastname'].split()[0] == cp_rows_dict[count]['lastname'].split()[0] or (cp_rows_dict[count]['position'] or cp_rows_dict[count]['phone'] or cp_rows_dict[count]['email'] is not None):
+        if initials['lastname'].split()[0] in cp_rows_dict[count].values() \
+                and (cp_rows_dict[count]['position'] or cp_rows_dict[count]['phone'] \
+                     or cp_rows_dict[count]['email'] is not None):
             initials['position'] = cp_rows_dict[count]['position']
             initials['phone'] = cp_rows_dict[count]['phone']
             initials['email'] = cp_rows_dict[count]['email']
         new_row_dict.append(initials)
         count += 1
-    pprint(new_row_dict)
+    print(new_row_dict)
     return new_row_dict
 
 
